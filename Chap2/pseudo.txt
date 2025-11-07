@@ -1,0 +1,43 @@
+Bắt đầu
+
+1. Nhập ma trận A cần phân rã có kích thước rows x cols
+
+2. Chuyển vị ma trận A để tạo ma trận At
+
+3. Tính ma trận S:
+    - Thực hiện phép nhân ma trận S = At * A.
+
+4. Tính toán giá trị riêng và vector riêng của S:
+    - Sử dụng thuật toán Eigen để tính:
+        + EigenValues: danh sách các giá trị riêng.
+        + EigenVectors: ma trận chứa các vector riêng tương ứng.
+
+5. Tính ma trận Sigma (σ):
+    - Với mỗi i, gán giá trị sigma[i][i] = sqrt(EigenValues[i]).
+    - Các phần tử khác trên ma trận Sigma được gán bằng 0.
+    - Sắp xếp sigma trên đường chéo và tương ứng EigenVectors theo thứ tự giảm dần của EigenValues
+
+
+6. Tính ma trận U:
+    - Với mỗi vector riêng (cột) của ma trận EigenVectors:
+        + Tạo một vector cột mới ui = A * EigenVectors[:, i] (cột thứ i của ma trận EigenVectors)
+        + Chuẩn hóa vector ui để trở thành một vector đơn vị.
+        + Gán vector đơn vị này làm cột thứ i của ma trận U.
+    - Nếu số hàng lớn hơn số cột:
+        + Tạo cơ sở trực giao bổ sung cho ma trận U
+
+7. Tính ma trận V:
+    - Gán ma trận V bằng ma trận EigenVectors.
+
+8. Hiển thị các ma trận:
+    - Ma trận U (rows x rows).
+    - Ma trận Sigma (rows x cols).
+    - Ma trận V chuyển vị (cols x cols).
+
+9. Xác minh kết quả phân tích SVD:
+    - Tính lại ma trận A bằng phép nhân:
+        A_computed = U * Sigma * Vt.
+    - So sánh từng phần tử của A_computed với A:
+        + Nếu tất cả phần tử đều sai khác nhỏ hơn 1e-5 thì phân tích SVD chính xác.
+
+Kết thúc

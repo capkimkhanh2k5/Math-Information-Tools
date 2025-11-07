@@ -1,0 +1,12 @@
+{
+    "code-runner.runInTerminal": true,
+    "code-runner.clearPreviousOutput": true,
+
+    "code-runner.executorMap": {
+        "cpp": "g++ -std=c++17 -Wall -Wextra -g -I/opt/homebrew/include/eigen3 \"$fullFileName\" -o \"./Output/$fileNameWithoutExt\" && \"./Output/$fileNameWithoutExt\""
+    },
+    "files.associations": {
+        "iomanip": "cpp",
+        "vector": "cpp"
+    }
+}

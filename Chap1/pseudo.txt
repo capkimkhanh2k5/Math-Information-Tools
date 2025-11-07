@@ -1,0 +1,37 @@
+1. Hàm extendedEuclid(a, b):
+   - Nếu b == 0:
+     - Gán x = 1, y = 0, gcd = a
+   - Ngược lại:
+     - Gọi hàm extendedEuclid(b, a % b)
+     - Lưu giá trị x vào biến tạm temp
+     - Cập nhật x = y
+     - Cập nhật y = temp - (a / b) * y
+
+2. Hàm modularInverse(a, m):
+   - Gọi hàm extendedEuclid(a, m)
+   - Trả về (x + m) % m (để đảm bảo kết quả không âm)
+
+3. Hàm input(n, A, M):
+   - Lặp qua n lần:
+     - Nhập a, m
+     - Thêm a vào vector A
+     - Thêm m vào vector M
+
+4. Hàm ChineseRemainderTheorem(n, A, M):
+   - Khởi tạo result = 0 và prod = 1
+   - Lặp qua n lần:
+     - Tính tích prod = M[0] * M[1] * ... * M[n-1]
+   - Lặp qua từng phương trình:
+     - Tính temp = prod / M[i]
+     - Tính modularInverse(temp, M[i]) để có nghịch đảo của temp mod M[i]
+     - Cập nhật result = result + A[i] * temp * modularInverse(temp, M[i])
+   - Trả về result % prod
+
+5. Hàm main():
+   - Nhập số phương trình n
+   - Khởi tạo vector A và M
+   - Gọi hàm input(n, A, M) để nhập các phương trình
+   - Tính tích prod = M[0] * M[1] * ... * M[n-1]
+   - Gọi hàm ChineseRemainderTheorem(n, A, M) để giải hệ phương trình và lưu kết quả vào result
+   - In kết quả dưới dạng "x = result + k * prod"
+

@@ -1,0 +1,96 @@
+1. Gradient Descent
+2. Gradient Descent with Momentum
+3. Newton
+----------------------------------------------------------------
+Mã giả
+
+Thuật toán GradientDescent:
+    Đầu vào: 
+        - initialX: Điểm khởi đầu
+        - learningRate (gamma): Tốc độ học
+        - maxIterations: Số vòng lặp tối đa
+        - f: Hàm cần tối ưu
+    Đầu ra:
+        - Giá trị của hàm f tại điểm x tối ưu
+
+    Bước 1: Khởi tạo:
+        - x = initialX // Điểm khởi đầu
+
+    Bước 2: Lặp qua các vòng lặp từ 1 đến maxIterations:
+        - Tính giá trị mới của x: 
+            - newX = x - learningRate * df(x)  // Cập nhật x theo công thức Gradient Descent
+        
+        - In ra thông tin của vòng lặp:
+            - In số vòng lặp (iteration), giá trị của x, và giá trị hàm f(x) với độ chính xác 5 chữ số sau dấu thập phân.
+        
+        - Nếu sự thay đổi của x nhỏ hơn một ngưỡng nhất định (ví dụ: |newX - x| < 0.00001), kết thúc vòng lặp.
+            - break
+
+        - Cập nhật giá trị x: 
+            - x = newX
+
+    Bước 3: Trả về giá trị của hàm f tại điểm tối ưu:
+        - return f(x)
+    
+Hàm main:
+    Đầu vào: 
+        - initialX: Điểm khởi đầu (ví dụ: -1)
+        - learningRate: Tốc độ học (ví dụ: 0.01)
+        - maxIterations: Số vòng lặp tối đa (ví dụ: 1000)
+
+    Bước 1: In ra tiêu đề:
+        - In "Gradient Descent without Momentum:" để giới thiệu thuật toán.
+
+    Bước 2: Gọi hàm GradientDescent với các tham số đầu vào thích hợp:
+        - gradientDescent(initialX, learningRate, maxIterations, f2, df2)
+
+    Kết thúc chương trình.
+------------------------------------------------------------
+Thuật toán GradientDescentWithMomentum:
+    Đầu vào:
+        - initialX: Điểm khởi đầu
+        - learningRate (gamma): Tốc độ học
+        - momentum (alpha): Hệ số momentum
+        - maxIterations: Số vòng lặp tối đa
+        - f: Hàm cần tối ưu
+        - df: Đạo hàm của hàm f
+    Đầu ra:
+        - Giá trị của hàm f tại điểm x tối ưu
+
+    Bước 1: Khởi tạo:
+        - velocity = 0.0  // Động lượng ban đầu
+        - x = initialX    // Điểm khởi đầu
+
+    Bước 2: Lặp qua các vòng lặp từ 1 đến maxIterations:
+        - Cập nhật động lượng: 
+            - velocity = momentum * velocity - learningRate * df(x)  // Công thức cập nhật động lượng
+        - Tính giá trị mới của x:
+            - newX = x + velocity  // Cập nhật x theo động lượng
+
+        - In ra thông tin của vòng lặp:
+            - In số vòng lặp (iteration), giá trị của x, và giá trị hàm f(x) với độ chính xác 5 chữ số sau dấu thập phân.
+
+        - Nếu sự thay đổi của x nhỏ hơn một ngưỡng nhất định (|newX - x| < 0.00001), kết thúc vòng lặp:
+            - break
+
+        - Cập nhật giá trị x:
+            - x = newX
+
+    Bước 3: Trả về giá trị của hàm f tại điểm tối ưu:
+        - return f(x)
+
+Hàm main:
+    Đầu vào:
+        - initialX: Điểm khởi đầu (ví dụ: -1)
+        - learningRate: Tốc độ học (ví dụ: 0.01)
+        - momentum: Hệ số momentum (ví dụ: 0.5)
+        - maxIterations: Số vòng lặp tối đa (ví dụ: 1000)
+
+    Bước 1: In ra tiêu đề:
+        - In "Gradient Descent with Momentum:" để giới thiệu thuật toán.
+
+    Bước 2: Gọi hàm GradientDescentWithMomentum với các tham số đầu vào thích hợp:
+        - gradientDescentWithMomentum(initialX, learningRate, momentum, maxIterations, f2, df2)
+
+    Kết thúc chương trình.
+

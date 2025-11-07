@@ -1,0 +1,93 @@
+1. Andrew's algorithm O(nlogn)
+2. Jarvis (wrapping) O(n*h)
+3. Divide and conquer O(nlogn)
+4. Chan
+5. Gramham (scanning) O(nlogn)
+
+
+- Pseudocode Divide and conquer O(nlogn)
+
+Function divide(a):
+    Nếu số lượng điểm trong 'a' <= 5:
+        Gọi Function bruteHull(a) để tìm bao lồi cho danh sách nhỏ
+    Ngược lại:
+        - Chia danh sách điểm 'a' thành 2 phần:
+            + Phần trái: left
+            + Phần phải: right
+        - Gọi divide(left) để tìm bao lồi cho phần trái
+        - Gọi divide(right) để tìm bao lồi cho phần phải
+        - Gọi merger(left_hull, right_hull) để kết hợp bao lồi của phần trái và phải
+        - Trả về bao lồi đã kết hợp
+
+Function bruteHull(a):
+    Khởi tạo tập hợp 's' để lưu các điểm bao lồi
+    - Duyệt qua tất cả các cặp điểm (i, j) trong danh sách 'a'
+        + Tính phương trình đường thẳng đi qua cặp điểm (i, j)
+        + Kiểm tra xem tất cả các điểm còn lại nằm về một phía của đường thẳng không
+        + Nếu tất cả các điểm đều nằm về một phía, thêm cặp điểm (i, j) vào tập hợp 's'
+    - Tính toán trung điểm của các điểm trong bao lồi
+    - Sắp xếp các điểm theo góc với trung điểm
+    - Trả về các điểm đã sắp xếp (bao lồi)
+
+Function merger(left_hull, right_hull):
+    Khởi tạo con trỏ 'inda' và 'indb' đại diện cho chỉ số trong 'left_hull' và 'right_hull'
+    - Tìm điểm đầu tiên có thể kết nối giữa left_hull và right_hull
+    - Duyệt qua các điểm, kiểm tra hướng quay của đoạn thẳng và kết hợp lại
+    - Sử dụng Function orientation để xác định hướng quay (theo chiều kim đồng hồ hoặc ngược lại)
+    - Kết hợp các điểm theo hướng quay phù hợp
+    - Trả về bao lồi kết hợp
+
+Function orientation(a, b, c):
+    - Tính định thức của ma trận 3x3 biểu diễn ba điểm
+    - Nếu định thức = 0, ba điểm thẳng hàng
+    - Nếu định thức > 0, ba điểm quay theo chiều kim đồng hồ
+    - Nếu định thức < 0, ba điểm quay ngược chiều kim đồng hồ
+
+
+Thuật toán Chan(v):
+    Đầu vào: Danh sách điểm v = [p1, p2, ..., pn] (mỗi điểm là một cặp tọa độ (x, y))
+    Đầu ra: Bao lồi của tập điểm v
+
+    Bước 1: Khởi tạo:
+        - hulls = []  // Danh sách chứa bao lồi của các nhóm con
+        - n = v.size()  // Số lượng điểm trong danh sách
+        - h = 0  // Số điểm trong bao lồi cuối cùng (dùng để kiểm tra độ phức tạp)
+
+    Bước 2: Lặp qua các giá trị t từ 0 đến n-1 (t là số lần thử với kích thước nhóm con):
+        - t_max = n-1  // Giá trị tối đa của t, là số lần thử chia nhóm
+        Lặp qua các giá trị m từ 1 đến 2^(2^t) - 1 (m là kích thước của mỗi nhóm con):
+            - m_max = 2^(2^t) - 1  // Giá trị tối đa của m (số điểm trong mỗi nhóm)
+            
+            Bước 2.1: Chia danh sách v thành các nhóm con có kích thước m:
+                - Chia v thành các nhóm con `chunks`, mỗi nhóm có m điểm
+                Lặp qua các chỉ số i từ 0 đến n với bước nhảy m (tạo ra các nhóm con có kích thước m):
+                    - Nếu (i + m) <= n:
+                        chunk = v[i, i + m - 1]  // Tạo nhóm con từ vị trí i đến i+m-1
+                    - Nếu (i + m) > n:
+                        chunk = v[i, n - 1]  // Lấy tất cả các điểm còn lại từ vị trí i đến hết danh sách
+
+                    - hull_con = GrahamScan(chunk)  // Tính bao lồi cho nhóm con
+                    - hulls.push_back(hull_con)  // Thêm bao lồi của nhóm con vào danh sách `hulls`
+
+            Bước 2.2: Khởi tạo danh sách `hull` chứa các cặp điểm (pair) để xây dựng bao lồi tổng thể.
+                - hull = []  // Danh sách bao lồi tổng thể
+                - extreme_pair = extreme_hullpt_pair(hulls)  // Tìm cặp điểm cực trị ban đầu từ danh sách `hulls`
+                - hull.push_back(extreme_pair)  // Thêm cặp điểm cực trị vào bao lồi tổng thể
+
+            Bước 2.3: Lặp qua các giá trị từ 1 đến m:
+                - Lặp m lần để tìm các cặp điểm tiếp theo và xây dựng bao lồi hoàn chỉnh
+                Lặp qua i từ 1 đến m:
+                    - pair p = next_hullpt_pair(hulls, hull)  // Tìm cặp điểm tiếp theo từ các bao lồi con
+                    - Nếu p == hull[0]:  // Nếu cặp điểm tiếp theo là điểm đầu tiên trong bao lồi
+                        - output = []  // Khởi tạo danh sách output
+                        - Lặp qua mỗi cặp điểm trong `hull`:
+                            - output.push_back(hulls[hull[j].first][hull[j].second])  // Thêm điểm vào output từ danh sách `hulls`
+                        - output.pop_back()  // Loại bỏ điểm dư thừa
+                        - Trả về output  // Trả về bao lồi hoàn chỉnh
+                    - hull.push_back(p)  // Nếu chưa hoàn thành, tiếp tục thêm cặp điểm vào bao lồi
+
+    Bước 3: Nếu không tìm được bao lồi hoàn chỉnh sau khi lặp qua tất cả các nhóm con, trả về danh sách rỗng.
+        - return []  // Nếu không tìm được bao lồi hợp lệ, trả về danh sách rỗng
+
+    Bước 4: Trả về bao lồi hoàn chỉnh từ danh sách `hull`.
+        - return output  // Trả về bao lồi được xây dựng từ danh sách `hull`
