@@ -1,6 +1,13 @@
 // Độ phức tạp: O(n*h) h là số các điểm trong bao đóng
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <set>
+#include <cmath>
+#include <limits>
+#include <ctime> 
+#include<cfloat>
 using namespace std;
 
 struct Point {
@@ -10,47 +17,40 @@ struct Point {
         return x < p.x || (x == p.x && y < p.y);
     }
 };
+
 int orientation(Point p, Point q, Point r) {
     int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
 
     if (val == 0) return 0; // thẳng hàng
-    return (val > 0) ? 1 : 2; // cùng / ngược chiều kim đồng hồ
+    return (val > 0) ? 1 : 2; // ngược chiều (1) / cùng chiều (2) kim đồng hồ
 }
 
-// TÌm bao lồi
-vector<Point> convexHull(Point points[], int n) {
-    // There must be at least 3 points
+// Tìm bao lồi
+vector<Point> convexHull(vector<Point> &points) {
+    int n = points.size();
     if (n < 3) return {};
 
-    // Initialize Result
     vector<Point> hull;
 
-    // Find the leftmost point
+    // Tìm điểm trái nhất
     int l = 0;
     for (int i = 1; i < n; i++)
         if (points[i].x < points[l].x)
             l = i;
 
-    // Start from leftmost point, keep moving counterclockwise
-    // until reach the start point again.
     int p = l, q;
     do {
-        // Add current point to result
         hull.push_back(points[p]);
 
-        // Search for a point 'q' such that orientation(p, q, x)
-        // is counterclockwise for all points 'x'. The idea is to
-        // keep track of last visited most counterclockwise point in q.
         q = (p + 1) % n;
         for (int i = 0; i < n; i++) {
             if (orientation(points[p], points[i], points[q]) == 2)
                 q = i;
         }
 
-        // Now q is the most counterclockwise with respect to p
         p = q;
 
-    } while (p != l); // While we don't come to the first point
+    } while (p != l);
 
     return hull;
 }
@@ -77,9 +77,10 @@ pair<Point, Point> find_min_edge(const vector<Point> &P) {
 }
 
 // Tìm 2 điểm có khoảng cách ngắn nhất
-pair<Point, Point> find_closest_points(Point points[], int n) {
+pair<Point, Point> find_closest_points(vector<Point> &points) {
     double min_dist = DBL_MAX;
     pair<Point, Point> closest_pair;
+    int n = points.size();
     
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
@@ -93,6 +94,7 @@ pair<Point, Point> find_closest_points(Point points[], int n) {
     
     return closest_pair;
 }
+
 // Tính diện tích bao lồi
 double poly_area(const vector<Point> &P) {
     int n = P.size();
@@ -111,7 +113,7 @@ bool is_inside_hull(const Point &pt, const vector<Point> &hull) {
 
     for (int i = 0; i < n; i++) {
         int j = (i + 1) % n;
-        if (orientation(hull[i], hull[j], pt) != 2) // not counterclockwise
+        if (orientation(hull[i], hull[j], pt) != 2)
             return false;
     }
     return true;
@@ -119,44 +121,44 @@ bool is_inside_hull(const Point &pt, const vector<Point> &hull) {
 
 // Sinh n điểm ngẫu nhiên
 vector<Point> generate_random_points(int n, int max_range) {
-    srand(time(0)); // Seed cho random
-    set<pair<double, double>> points_set;
-	vector<Point> points;
-	
-	while (points.size() < n) 
-	{
-		double x = (pow(-1, rand() % 2))*(rand() % max_range);
-		double y = (pow(-1, rand() % 2))*(rand() % max_range);
-		
-		if (points_set.find(make_pair(x, y)) == points_set.end()) {
-			points_set.insert(make_pair(x, y));
-			Point P;
-			P.x = x;
-			P.y = y;
-			points.push_back(P);
-		}	
-	} 	
-	return points;
+    srand(time(0));
+    set<pair<int, int>> points_set;
+    vector<Point> points;
+    
+    while (points.size() < n) {
+        int x = (rand() % 2 == 0 ? 1 : -1) * (rand() % max_range);
+        int y = (rand() % 2 == 0 ? 1 : -1) * (rand() % max_range);
+        
+        if (points_set.find({x, y}) == points_set.end()) {
+            points_set.insert({x, y});
+            points.push_back({x, y});
+        }
+    }
+    return points;
 }
 
 int main() {
+    //Tạo thủ công
+    vector<Point> points = {
+        {3,5}, {6,8}, {9,10}, {11,2}, {4,9}, {7,8}, {9,9}, {10,3},
+        {11,15}, {34,5}, {32,1}, {25,10}, {18,8}, {7,18}, {10,14}
+    };
 
+    int n = points.size();
     
-
-    int n = 15; // Số lượng điểm ngẫu nhiên
-    int max_range = 10;
-    vector<Point> points = generate_random_points(n, max_range); // Danh sach cac diem dau vao
-
-    
+    // Sinh ngẫu nhiên
+    // int n = 15;
+    // int max_range = 10;
+    // vector<Point> points = generate_random_points(n, max_range);
 
     cout << "Danh sach cac diem dau vao: \n";
     for (int i = 0; i < n; i++) {
         cout << "(" << points[i].x << ", " << points[i].y << ") ";
     }
-	cout << endl;
+    cout << endl;
 
     // Find convex hull
-    vector<Point> hull = convexHull(points, n);
+    vector<Point> hull = convexHull(points);
 
     cout << "\nBao Loi la \n";
     for (const auto &p : hull)
@@ -164,24 +166,28 @@ int main() {
 
     // Calculate area of convex hull
     double area = poly_area(hull);
-    cout << "\nDien tich cua Bao Loi la: "  << area << endl;
+    cout << "\nDien tich cua Bao Loi la: " << area << endl;
 
     // Find shortest edge in convex hull
     pair<Point, Point> min_edge = find_min_edge(hull);
-    cout << "Canh be nhat cua bao loi la (" << min_edge.first.x << ", " << min_edge.first.y << ") va ("
-         << min_edge.second.x << ", " << min_edge.second.y << ")\n";
-    cout << "Khoang cach ngan nhat: " << distance(min_edge.first, min_edge.second) << endl;
-     // Find two points with the shortest distance in the original set
-    pair<Point, Point> closest_pair = find_closest_points(points, n);
-    cout << "\n2 diem co khoang cach ngan nhat la (" << closest_pair.first.x << ", " << closest_pair.first.y << ") va ("
-    << closest_pair.second.x << ", " << closest_pair.second.y << ")\n";
+    cout << "\nCanh ngan nhat cua bao loi la (" << min_edge.first.x << ", " << min_edge.first.y << ") va ("
+        << min_edge.second.x << ", " << min_edge.second.y << ")\n";
+    cout << "Voi khoang cach: " << distance(min_edge.first, min_edge.second) << endl;
+    
+    // Find two points with the shortest distance in the original set
+    pair<Point, Point> closest_pair = find_closest_points(points);
+    cout << "\n2 diem co khoang cach ngan nhat trong tap diem la (" 
+        << closest_pair.first.x << ", " << closest_pair.first.y << ") va ("
+        << closest_pair.second.x << ", " << closest_pair.second.y << ")\n";
     cout << "Voi khoang cach la: " << distance(closest_pair.first, closest_pair.second) << endl;
+    
     // Check if a random point is inside the convex hull
-    Point test_point = {1, 2}; // example point
+    Point test_point = {10, 10};
     if (is_inside_hull(test_point, hull)) {
-        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam trong bao dong.\n";
+        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam trong bao loi.\n";
     } else {
-        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam ngoai bao dong.\n";
+        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam ngoai bao loi.\n";
     }
+    
     return 0;
 }

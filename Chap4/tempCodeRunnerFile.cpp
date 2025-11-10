@@ -27,7 +27,7 @@ pair<double, double> minimize(function<double(double, double)> f, double x1, dou
         double gx2 = grad.second;
         
         double gnorm = sqrt(gx1 * gx1 + gx2 * gx2);
-        if (gnorm < 1e-8) break;  // Sai so cho viec tim cuc tieu ben trong
+        if (gnorm < 1e-8) break; 
         
         // Tim kiem tuyen tinh backtracking
         double new_x1, new_x2;

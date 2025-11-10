@@ -6,7 +6,6 @@
 using namespace std;
 using namespace Eigen; 
 
-// g++ -I C:/Users/Loc/eigen "SVD.cpp" -o "SVD"
 
 // Function declarations
 void inputMatrix(double matrix[][10], int &rows, int &cols);

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Hàm f(X) của bạn (không đổi)
+// Hàm f(X) 
 double f(const vector<double>& X)
 {
     double x = X[0];
@@ -17,7 +17,7 @@ double f(const vector<double>& X)
            + 0.1 * cos(y - z);
 }
 
-// Hàm tính đạo hàm số học (không đổi)
+// Hàm tính đạo hàm số học 
 double numericalDerivative(const vector<double>& X, int i, double (*f)(const vector<double>&), double h = 1e-6)
 {
     vector<double> X_plus = X;
@@ -44,7 +44,7 @@ vector<double> gradientDescentWithMomentum(
 
     for (int iteration = 1; iteration <= maxIterations; ++iteration)
     {
-        // 1. Tính Gradient (như cũ)
+        // 1. Tính Gradient
         vector<double> grad(n);
         for (int i = 0; i < n; ++i)
             grad[i] = numericalDerivative(X, i, f);
@@ -67,7 +67,7 @@ vector<double> gradientDescentWithMomentum(
             cout << ", Function Value = " << f(X) << endl;
         }
 
-        // Kiểm tra hội tụ (như cũ)
+        // Kiểm tra hội tụ 
         double maxChange = 0;
         for (int i = 0; i < n; ++i)
             maxChange = max(maxChange, fabs(newX[i] - X[i]));

@@ -1,7 +1,7 @@
 1. Andrew's algorithm O(nlogn)
 2. Jarvis (wrapping) O(n*h)
 3. Divide and conquer O(nlogn)
-4. Chan
+4. Chan O(nlogh)
 5. Gramham (scanning) O(nlogn)
 
 

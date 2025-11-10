@@ -1,3 +1,5 @@
+// Độ phức tạp: O(n*logh)
+
 #include <iostream>
 #include <stdlib.h>
 #include <vector>
@@ -32,15 +34,19 @@ class Point{
     }
 } p0;
 
+// Hàm xác định hướng của 3 điểm (p, q, r)
 int orientation(Point p, Point q, Point r){
     int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
     if (val == 0) return 0;
     return (val > 0)? -1: 1;
 }
+
+// Hàm tính khoảng cách giữa 2 điểm
 double dist(Point p1, Point p2){
     return sqrt((p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y));
 }
 
+// Hàm tìm cạnh nhỏ nhất trong một đa giác
 pair<Point, Point> find_min_edge(vector<Point> v){
     double min_dist = numeric_limits<double>::max();
     int n = v.size();
@@ -55,6 +61,8 @@ pair<Point, Point> find_min_edge(vector<Point> v){
     }
     return res;
 }
+
+// Hàm tìm cặp điểm gần nhất trong một tập hợp các điểm
 pair<Point, Point> find_closet_points(vector<Point> v, int n){
     double min_dist = numeric_limits<double>::max();
     pair<Point, Point> closet_pair;
@@ -69,6 +77,8 @@ pair<Point, Point> find_closet_points(vector<Point> v, int n){
     }
     return closet_pair;
 }
+
+// Hàm so sánh cho qsort để sắp xếp các điểm dựa trên góc cực với một điểm toàn cục p0
 int compare(const void *vp1, const void *vp2){
     Point *p1 = (Point *)vp1;
     Point *p2 = (Point *)vp2;
@@ -77,6 +87,8 @@ int compare(const void *vp1, const void *vp2){
         return (dist(p0, *p2) >= dist(p0, *p1))? -1 : 1;
     return (orient == 1)? -1: 1;
 }
+
+// Hàm tìm tiếp tuyến từ một điểm đến một bao lồi
 int tangent(vector<Point> v,Point p){
     int l=0;
     int r= v.size();
@@ -98,6 +110,8 @@ int tangent(vector<Point> v,Point p){
     }
     return l;
 }
+
+// Hàm tìm điểm có tọa độ y nhỏ nhất trong tất cả các bao lồi
 pair<int,int> extreme_hullpt_pair(vector<vector<Point> >& hulls){
     int h= 0,p= 0;
     for (int i=0; i<hulls.size(); ++i){
@@ -115,6 +129,8 @@ pair<int,int> extreme_hullpt_pair(vector<vector<Point> >& hulls){
     }
     return make_pair(h,p);
 }
+
+// Hàm tìm điểm tiếp theo trong bao lồi của một tập hợp các bao lồi
 pair<int,int> next_hullpt_pair(vector<vector<Point> >& hulls, pair<int,int> lPoint){
     Point p = hulls[lPoint.first][lPoint.second];
     pair<int,int> next = make_pair(lPoint.first, (lPoint.second + 1) % hulls[lPoint.first].size());
@@ -130,6 +146,8 @@ pair<int,int> next_hullpt_pair(vector<vector<Point> >& hulls, pair<int,int> lPoi
     }
     return next;
 }    
+
+// Hàm trợ giúp cho Graham Scan, đảm bảo các điểm tạo thành một rẽ trái
 vector<Point> keep_left (vector<Point>& v,Point p){
     while(v.size()>1 && orientation(v[v.size()-2],v[v.size()-1],p) != LEFT_TURN)
         v.pop_back();
@@ -137,6 +155,8 @@ vector<Point> keep_left (vector<Point>& v,Point p){
         v.push_back(p);
     return v;
 }
+
+// Hàm tính bao lồi của một tập hợp các điểm bằng thuật toán Graham Scan
 vector<Point> GrahamScan(vector<Point>& Points) {
     if (Points.size() <= 1) 
         return Points;
@@ -151,6 +171,8 @@ vector<Point> GrahamScan(vector<Point>& Points) {
     lower_hull.insert(lower_hull.end(), upper_hull.begin() + 1, upper_hull.end());
     return lower_hull;
 }
+
+// Hàm tính bao lồi của một tập hợp các điểm bằng thuật toán Chan
 vector<Point> chansalgorithm(vector<Point> v) {
     for(int t = 0; t < v.size(); ++t) {
         for(int m = 1; m < (1 << (1 << t)); ++m) {
@@ -181,6 +203,8 @@ vector<Point> chansalgorithm(vector<Point> v) {
     }
     return {};
 }
+
+// Hàm tạo ra một tập hợp các điểm ngẫu nhiên
 vector<Point> generateRandomPoints(int numberOfPoints, int maxRange) {
     vector<Point> Points;
     srand(time(nullptr));
@@ -197,6 +221,7 @@ vector<Point> generateRandomPoints(int numberOfPoints, int maxRange) {
     return Points;
 }
 
+// Hàm tính diện tích của một đa giác
 double poly_area(const vector<Point> &P) 
 {
 	int n = P.size();
@@ -208,6 +233,8 @@ double poly_area(const vector<Point> &P)
 	}
 	return abs(area) / 2.0;
 }
+
+// Hàm kiểm tra xem một điểm có nằm trong một bao lồi hay không
 bool is_Point_in_convex_hull(const vector<Point>& hull, const Point& p) {
     int n = hull.size();
     if (n < 3) return false;
@@ -222,35 +249,41 @@ bool is_Point_in_convex_hull(const vector<Point>& hull, const Point& p) {
 }
 
 int main(){
-
-    
-
     vector<Point> v = {
         {3,5}, {6,8},{9,10}, {11,2},{4,9},{7,8},{9,9},{10,3},{11,15},
         {34,5},{32,1},{25,10},{18,8},{7,18},{10,14}
     };
 
-    // srand(time(0));
     int n = v.size();
-    // int max_range = 20;
-
-    // vector<Point> v = generateRandomPoints(n, max_range);
 
     cout << "Cac diem: \n";
     for (auto p : v) cout << p << "\t";
     cout << endl;
+    
     vector<Point> output = chansalgorithm(v);
-    cout << "\Bao loi: \n";
+    
+    cout << "Bao loi: \n";
     for(auto p : output) cout << p << "\t";
     cout << "\n";
-    // cout << "\Diem tich bao loi: " << poly_area(output) << endl;
+    
+    cout << "Dien tich bao loi: " << poly_area(output) << endl;
+    
     pair<Point, Point> min_edge = find_min_edge(output);
     cout << "\nCanh ngan nhat trong bao loi: (" << min_edge.first.x << ", " << min_edge.first.y << ") va (" 
-         << min_edge.second.x << ", " << min_edge.second.y << ")\n";
+        << min_edge.second.x << ", " << min_edge.second.y << ")\n";
     cout << "Voi chieu dai la: " << dist(min_edge.first, min_edge.second) << endl;
-    pair<Point, Point> closet_points = find_closet_points(v, v.size()-1);
-    // cout << "\Diem gan nhat trong bao loi: (" << closet_points.first.x << ", " << closet_points.first.y << ") va (" 
-    //      << closet_points.second.x << ", " << closet_points.second.y << ")\n";
-    // cout << "Chieu dai canh gan nhat la: " << dist(closet_points.first, closet_points.second) << endl;
+    
+    pair<Point, Point> closet_points = find_closet_points(v, v.size());
+    cout << "\nDiem gan nhat trong tap diem: (" << closet_points.first.x << ", " << closet_points.first.y << ") va (" 
+        << closet_points.second.x << ", " << closet_points.second.y << ")\n";
+    cout << "Chieu dai canh gan nhat la: " << dist(closet_points.first, closet_points.second) << endl;
+
+    Point test_point = {10, 10};
+    if (is_Point_in_convex_hull(output, test_point)) {
+        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam trong bao loi.\n";
+    } else {
+        cout << "\nDiem (" << test_point.x << ", " << test_point.y << ") nam ngoai bao loi.\n";
+    }
+    
     return 0;
 }
