@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <functional>
+
 using namespace std;
 
 const double EPS = 1e-6;
@@ -119,12 +120,12 @@ int main()
         double f_val = f(newX);
 
         cout << setw(8) << outer
-             << setw(12) << lambda
-             << setw(10) << r
-             << setw(15) << newX[0]
-             << setw(15) << newX[1]
-             << setw(15) << newX[2]
-             << setw(15) << h_val << endl;
+            << setw(12) << lambda
+            << setw(10) << r
+            << setw(15) << newX[0]
+            << setw(15) << newX[1]
+            << setw(15) << newX[2]
+            << setw(15) << h_val << endl;
 
         // Update λ and r
         lambda += r * h_val;

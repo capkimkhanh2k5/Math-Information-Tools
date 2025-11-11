@@ -1,0 +1,62 @@
+Thuật toán tìm nghịch đảo ma trận (Gauss-Jordan):
+    Đầu vào:
+        - matrix: Ma trận cần tìm nghịch đảo
+    Đầu ra:
+        - Ma trận nghịch đảo của ma trận đầu vào
+
+    Bước 1: Kiểm tra nếu ma trận là ma trận vuông (số hàng = số cột).
+        - Nếu không phải ma trận vuông, ném lỗi "Matrix must be square."
+
+    Bước 2: Tạo ma trận mở rộng từ ma trận đầu vào (matrix | identity).
+        - Phần bên trái là ma trận ban đầu.
+        - Phần bên phải là ma trận đơn vị cùng kích thước.
+
+    Bước 3: Áp dụng phương pháp Gauss-Jordan:
+        - Duyệt qua từng hàng của ma trận:
+            - Nếu phần tử trên đường chéo là 0, tìm một hàng khác và hoán đổi để có phần tử khác 0.
+            - Chuẩn hóa hàng i sao cho phần tử tại vị trí (i, i) bằng 1.
+            - Dùng biến đổi hàng để làm các phần tử ngoài đường chéo bằng 0.
+
+    Bước 4: Trả về phần bên phải của ma trận mở rộng là ma trận nghịch đảo.
+
+Thuật toán tính xác suất sau một số bước nhất định:
+    Đầu vào:
+        - P: Ma trận chuyển đổi trạng thái
+        - initialState: Vecto trạng thái ban đầu
+        - steps: Số bước cần tính
+    Đầu ra:
+        - Xác suất sau số bước
+
+    Bước 1: Chéo hóa ma trận P:
+        - Sử dụng EigenSolver để tính các giá trị và vector riêng của ma trận P.
+        - Ma trận Q là ma trận vector riêng và Lambda là ma trận chéo chứa các giá trị riêng.
+
+    Bước 2: Lũy thừa ma trận Lambda^n:
+        - Tính Lambda^n bằng cách nhân Lambda với chính nó n lần.
+
+    Bước 3: Tính P^n:
+        - Tính P^n theo công thức P^n = Q * Lambda^n * Q^(-1).
+        - Nhân Q và Lambda^n để tạo P_n_temp.
+        - Nhân P_n_temp với nghịch đảo của Q (Q_inv) để tạo P_n.
+
+    Bước 4: In ra xác suất từ "Trung bình" lên "Giàu" tại phần tử P_n(1, 0).
+
+    Bước 5: Trả về xác suất sau n bước (P_n(1, 0)).
+
+Hàm main:
+    Đầu vào:
+        - Ma trận chuyển đổi trạng thái P (4x4).
+        - Trạng thái ban đầu (1.0 tại "Trung bình").
+        - Số bước cần tính (steps = 3).
+
+    Bước 1: Khởi tạo ma trận P và trạng thái ban đầu.
+        - P có kích thước 4x4 và chứa các xác suất chuyển đổi.
+        - initialState có kích thước 4x1, với giá trị 1.0 tại vị trí tương ứng với "Trung bình".
+
+    Bước 2: In ra tiêu đề "Xác suất từ bình dân lên giàu:".
+
+    Bước 3: Lặp qua các bước từ 1 đến steps (3 bước):
+        - Gọi hàm `calculateProbability` để tính xác suất sau mỗi bước.
+        - In ra kết quả xác suất sau từng bước.
+
+    Kết thúc chương trình.
